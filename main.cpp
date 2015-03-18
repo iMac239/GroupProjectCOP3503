@@ -2,13 +2,10 @@
 //  main.cpp
 //  ImageFilters
 //
-//  Created by Ian MacCallum on 3/15/15.
-//  Copyright (c) 2015 MacCDevTeam. All rights reserved.
-//
+
 
 #include <iostream>
 #include <string>
-// Open CV
 
 using namespace std;
 
@@ -84,16 +81,21 @@ int main(int argc, const char * argv[]) {
         // Handle user command
         switch (n) {
             case 1:
+                cout << "Applying Border" << endl;
                 break;
             case 2:
+                cout << "Applying Filter" << endl;
                 break;
             case 3:
+                cout << "Creating Meme" << endl;
                 break;
             case 4:
+                cout << "Writing Image" << endl;
                 image->writeToPath("", "");
                 break;
             case 5:
                 // Break loop to kill program
+                cout << "Terminating Program" << endl;
                 b = false;
                 break;
             default:
