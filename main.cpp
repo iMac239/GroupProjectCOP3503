@@ -2,12 +2,18 @@
 //  main.cpp
 //  ImageFilters
 //
-
+//  Created by Ian MacCallum on 3/15/15.
+//  Copyright (c) 2015 MacCDevTeam. All rights reserved.
+//
 
 #include <iostream>
 #include <string>
 
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
 using namespace std;
+using namespace cv;
 
 enum Filter { Tint, Grayscale, Other };
 enum Color { Red, Blue, Green };
@@ -17,25 +23,46 @@ enum Color { Red, Blue, Green };
 class Image {
     
 private:
-    int *data[];
+    Mat matrix;
     
 public:
     // Initializers
     Image(string path) {
-        
+        Mat matrix = imread(path, CV_LOAD_IMAGE_COLOR);
+        this->matrix = matrix;
     }
     
-    Image(int *data[]) {
-        
+    Image(Mat matrix) {
+        this->matrix = matrix;
     }
     
     // Setters/Getters
-    void setData(int *data[]) {
-        data = data;
+    Mat getMatrix() {
+        return this->matrix;
+    }
+    
+    void setMatrix(Mat matrix) {
+        this->matrix = matrix;
     }
     
     // Options
     void createMeme(string topText, string bottomText) {
+        //        void putText(Mat& img, const string& text, Point org, int fontFace, double fontScale, Scalar color, int thickness=1, int lineType=8, bool bottomLeftOrigin=false )
+        Mat newMatrix = matrix;
+        
+        putText(newMatrix, topText, cvPoint(30,30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(200,200,250));
+        putText(newMatrix, bottomText, cvPoint(30,150), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(200,200,250));
+        
+        matrix = newMatrix;
+        
+        /// Create Windows
+        namedWindow("New Image", 1);
+        
+        /// Show Image in Window
+        imshow("New Image", matrix);
+        
+        /// Wait until user press some key
+        waitKey();
         
     }
     
@@ -47,8 +74,8 @@ public:
         
     }
     
-    void writeToPath(string path, string name) {
-        
+    void writeToPath(string path) {
+        imwrite(path, matrix);
     }
 };
 
@@ -58,8 +85,16 @@ public:
 
 int main(int argc, const char * argv[]) {
     
-    // Initialize image from argument
-    Image *image = new Image("");
+    // Get input file
+    string path;
+    cout << "Enter File Path: ";
+    cin >> path;
+    
+    Image *image = new Image(path);
+    
+    
+    
+    string topText, bottomText, writePath;
     
     
     bool b = true;
@@ -88,10 +123,18 @@ int main(int argc, const char * argv[]) {
                 break;
             case 3:
                 cout << "Creating Meme" << endl;
+                cout << "Enter top text: ";
+                getline(cin, topText, '\n');
+                cout << "Enter bottom text: ";
+                getline(cin, bottomText, '\n');
+                
+                image->createMeme(topText, bottomText);
                 break;
             case 4:
                 cout << "Writing Image" << endl;
-                image->writeToPath("", "");
+                cout << "Enter full path";
+                cin >> writePath;
+                image->writeToPath("");
                 break;
             case 5:
                 // Break loop to kill program
