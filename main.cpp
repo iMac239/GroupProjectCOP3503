@@ -166,11 +166,6 @@ public:
     }
     
     void adjustColor() {
-        
-        
-        
-        
-        
         // RGB filter
         /*  for (int y = 0; y < matrix.rows; y++) {
          for (int x = 0; x < matrix.cols; x++) {
@@ -191,6 +186,39 @@ public:
     }
     
     void applyBorder(int width, Color color) {
+        //TREVOR: NOT COMPILED
+        //TOP ROW/BOTTOM ROW
+        /*for(int y=0; y<width;y++){
+             for(int x=0; x<matrix.cols;x++){
+                 Vec3b colorTop=matrix.at<Vec3b>(Point(x,y));  //Color of Top Border
+                 Vec3b colorBottom=matrix.at<Vec3b>(Point(x,matrix.rows-y)); //Color of Bottom Border
+                    colorTop[0]=255;                  //Sets borders to black
+                    colorTop[1]=255;
+                    colortTop[2]=255;
+                    colorBottom[0]=255;
+                    colorBottom[1]=255;
+                    colortBottom[2]=255;
+                    matrix.at<Vec3b>(Point(x,y))=colorTop;  //Sets Top Border
+                    matrix.at<Vec3v>(Point(x,matrix.rows-y))=colorBottom; //Sets Bottom Border
+             }
+        }*/
+        //LEFT COLUMN/ RIGHT COLUMN 
+          /*for(int y=0; y<matrix.rows;y++){
+             for(int x=0; x<width;x++){
+                 Vec3b colorLeft=matrix.at<Vec3b>(Point(x,y));  //Color of Left Border
+                 Vec3b colorRight=matrix.at<Vec3b>(Point(matrix.cols-x,y)); //Color of Right Border
+                    colorLeft[0]=255;                  //Sets borders to black
+                    colorLeft[1]=255;
+                    colortLeft[2]=255;
+                    colorRight[0]=255;
+                    colorRight[1]=255;
+                    colorRight[2]=255;
+                    matrix.at<Vec3b>(Point(x,y))=colorLeft;  //Sets Left Border
+                    matrix.at<Vec3v>(Point(matrix.cols-x,y))=colorRight; //Sets Right Border
+                    }
+        }*/
+        
+             
         
     }
     
