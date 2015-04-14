@@ -1,0 +1,2 @@
+ImageManipulator : UI.cpp Image.cpp
+	g++ `pkg-config --cflags opencv` `pkg-config --libs opencv` -o ImageManipulator.out UI.cpp Image.cpp

@@ -1,0 +1,137 @@
+class Image {
+    
+	private:
+	    Mat matrix;
+	    Mat originalMatrix;
+	    
+	    
+	    
+	public:
+	    // Initializers
+	    Image(string path) {
+		  Mat matrix = imread(path, CV_LOAD_IMAGE_COLOR);
+		  this->matrix = matrix;
+		  this->originalMatrix = matrix;
+	    }
+	    
+	    Image(Mat matrix) {
+		  this->matrix = matrix;
+		  this->originalMatrix = matrix;
+	    }
+	    
+	    // Setters/Getters
+	    Mat getMatrix() {
+		  return this->matrix;
+	    }
+	    
+	    void setMatrix(Mat matrix) {
+		  this->matrix = matrix;
+	    }
+	    
+	    // Options
+	    void createMeme(string topText, string bottomText, double fontSize) {
+		  
+		  addMemeText(matrix, topText, bottomText, fontSize);
+	    }
+	    
+	    void previewImage() {
+		  
+		  // Display image
+		  imshow("ImageWindow", matrix);
+		  
+		  // On key touch close image
+		  waitKey(0);
+		  cvDestroyWindow("ImageWindow");
+	    }
+	    
+	    void presetTintColor(Color color) {
+		  switch (color) {
+		      case Red:
+		          break;
+		      case Blue:
+		          break;
+		      case Green:
+		          break;
+		      default:
+		          break;
+		  }
+	    }
+	    
+	    void customTintColor(int hue) {
+		  // Convert BGR to HSV
+		  Mat hsvMatrix;
+		  cvtColor(matrix, hsvMatrix, CV_BGR2HSV_FULL);
+		  
+		  for (int y = 0; y < hsvMatrix.rows; y++) {
+		      for (int x = 0; x < hsvMatrix.cols; x++) {
+		          Vec3b color = hsvMatrix.at<Vec3b>(Point(x,y));
+		          color[0] = hue;
+		          hsvMatrix.at<Vec3b>(Point(x,y)) = color;
+		      }
+		  }
+		  
+		  // Convert HSV to HSV
+		  cvtColor(hsvMatrix, matrix, CV_HSV2BGR_FULL);
+	    }
+	    
+	    void adjustColor() {
+		  // RGB filter
+		  /*  for (int y = 0; y < matrix.rows; y++) {
+		   for (int x = 0; x < matrix.cols; x++) {
+		   Vec3b color = matrix.at<Vec3b>(Point(x,y));
+		   
+		   color[0] = 0;
+		   color[2] = 0;
+		   
+		   matrix.at<Vec3b>(Point(x,y)) = color;
+		   
+		   }
+		   }
+		   */
+		  
+		  
+		  
+		  
+	    }
+	    
+	    void applyBorder(int width, Color color) {
+		  //TREVOR: NOT COMPILED
+		  //TOP ROW/BOTTOM ROW
+		  /*for(int y=0; y<width;y++){
+		       for(int x=0; x<matrix.cols;x++){
+		           Vec3b colorTop=matrix.at<Vec3b>(Point(x,y));  //Color of Top Border
+		           Vec3b colorBottom=matrix.at<Vec3b>(Point(x,matrix.rows-y)); //Color of Bottom Border
+		              colorTop[0]=255;                  //Sets borders to black
+		              colorTop[1]=255;
+		              colortTop[2]=255;
+		              colorBottom[0]=255;
+		              colorBottom[1]=255;
+		              colortBottom[2]=255;
+		              matrix.at<Vec3b>(Point(x,y))=colorTop;  //Sets Top Border
+		              matrix.at<Vec3v>(Point(x,matrix.rows-y))=colorBottom; //Sets Bottom Border
+		       }
+		  }*/
+		  //LEFT COLUMN/ RIGHT COLUMN 
+		    /*for(int y=0; y<matrix.rows;y++){
+		       for(int x=0; x<width;x++){
+		           Vec3b colorLeft=matrix.at<Vec3b>(Point(x,y));  //Color of Left Border
+		           Vec3b colorRight=matrix.at<Vec3b>(Point(matrix.cols-x,y)); //Color of Right Border
+		              colorLeft[0]=255;                  //Sets borders to black
+		              colorLeft[1]=255;
+		              colortLeft[2]=255;
+		              colorRight[0]=255;
+		              colorRight[1]=255;
+		              colorRight[2]=255;
+		              matrix.at<Vec3b>(Point(x,y))=colorLeft;  //Sets Left Border
+		              matrix.at<Vec3v>(Point(matrix.cols-x,y))=colorRight; //Sets Right Border
+		              }
+		  }*/
+		  
+		       
+		  
+	    }
+	    
+	    void writeToPath(string path) {
+		  imwrite(path, matrix);
+	    }
+};
