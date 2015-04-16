@@ -7,26 +7,20 @@
 
 class Image{
 	public:
-		Image(){};							//Empty constructor
-		Image(std::string filePath){				//Default constructor
-			cv::Mat tmpMatrix = cv::imread(filePath);
-			//Check if image loaded successfully
-			if(!tmpMatrix.data){
-				std::exception e;
-				throw e;
-			}
-			//Store image
-			else{
-				matrix = tmpMatrix;
-				originalMatrix = tmpMatrix;
-			}
-		}
+		Image(){};				//Empty constructor
+		Image(std::string);		//Default constructor
 		
-		void preview();
+		void previewCurr();		//Display current state of image
+		void preview();			//Display last accepted state of image
+		void previewOriginal();		//Display original image
+		void commit();			//Commits changes to the image
+		bool save(std::string);		//Saves image to file system
 		
 	private:
-		cv::Mat matrix;			//Stores the current state of the image
+		cv::Mat matrix;			//Stores the current manipulation of the image
+		cv::Mat commitMatrix;		//Stores the last accepted state of the image
 		cv::Mat originalMatrix;		//Stores the original image for user reference
+		std::string fileType; 		//Stores the file type for the loaded image
 };
 
 #endif

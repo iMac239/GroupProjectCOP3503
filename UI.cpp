@@ -5,6 +5,7 @@
 using namespace std;
 
 int main(){
+	//TODO change to image pointer
 	Image img; //Image object for manipulations
 
 	/* Initial UI */
@@ -38,9 +39,10 @@ int main(){
 		cout << "\t2) Filters" << endl;
 		cout << "\t3) Color focus" << endl;
 		cout << "\t4) Generate meme" << endl;
-		cout << "\t5) View original" << endl;
-		cout << "\t6) Save image" << endl;
-		cout << "\t7) Exit" << endl;
+		cout << "\t5) View current image" << endl;
+		cout << "\t6) View original image" << endl;
+		cout << "\t7) Save image" << endl;
+		cout << "\t8) Exit" << endl;
 		
 		//Get user input
 		cout << "INPUT>> ";
@@ -48,32 +50,88 @@ int main(){
 		choice = atoi(input.c_str());
 		
 		switch(choice){
+			//Borders
 			case 1:
 				break;
+				
+			//Filters
 			case 2:
 				break;
+				
+			//Color Focus
 			case 3:
 				break;
+				
+			//Generate Meme
 			case 4:
 				break;
+				
+			//View current image
 			case 5:
+				cout << "OUTPUT>> Displaying current image preview. Press any key to continue." << endl;
+				img.preview();
+				break;
+				
+			//View original
+			case 6:
 				cout << "OUTPUT>> Displaying original image preview. Press any key to continue." << endl;
 				img.previewOriginal();
 				break;
-			case 6:
-				break;
+				
+			//Save image
 			case 7:
+				{
+					//Get file path from user
+					cout << "OUTPUT>> Please enter a filepath for the saved image: " << endl;
+					string newFilePath;
+					cout << "INPUT>> ";
+					cin >> newFilePath;
+				
+					//Save image to provided filepath, if valid
+					while(!img.save(newFilePath)){
+						cout << "ERROR>> Unable to save file. Please try again." << endl;
+						cout << "OUTPUT>> Please enter a filepath for the saved image: " << endl;
+						cin >> newFilePath;
+					}
+					
+					//Confirm file save to user
+					cout << "OUTPUT>> File saved successfully." << endl;
+				
+					break;
+				}
+				
+			//Exit Program
+			case 8:
 				notDone = false;
 				break;
+			
+			//Invalid choice
 			default:
 				cout << "ERROR>> Invalid input." << endl;
 				break;
 		}
 		
-		//Display a preview of the altered image
+		//Image has been altered. Confirmation UI
 		if(1 <= choice && choice <= 4){
+			//Display altered image
 			cout << "OUTPUT>> Displaying new image preview. Press any key to continue." << endl;
-			img.preview();
+			img.previewCurr();
+			
+			//Prompt user to commit changes
+			cout << "OUTPUT>> Do you want to commit your changes? (y/n)" << endl;
+			char c;
+			cout << "INPUT>> ";
+			cin >> c;
+			
+			if(c == 'Y' || c == 'y'){
+				img.commit();
+				cout << "OUPUT>> Changes commited successfully." << endl;
+			}
+			else{
+				img.revert();
+				cout << "OUTPUT>> Changes aborted." << endl;
+			}
+			
 		}
 	}
 		
