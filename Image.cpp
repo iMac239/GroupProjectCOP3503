@@ -15,8 +15,8 @@ Image::Image(string filePath){
 	//Store image, and extract file extension
 	else{
 		matrix = tmpMatrix;
-		commitMatrix = tmpMatrix;
-		originalMatrix = tmpMatrix;
+		commitMatrix = cv::imread(filePath);
+		originalMatrix = cv::imread(filePath);
 		
 		//Extract file extension
 		string::size_type pos = filePath.find_last_of('.');

@@ -77,7 +77,7 @@ void Image::commit(){
 	commitMatrix = matrix;
 }
 
-
+//Reverts current image to last commit
 void Image::revert(){
 	matrix = commitMatrix;
 }
