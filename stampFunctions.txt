@@ -1,0 +1,80 @@
+/*Stamp Functions created by Thomas Headley*/
+
+//Sets the center point for where stamp will go
+Point Image::destinationPoint(int location){
+
+	int width = matrix.cols;
+	int height = matrix.rows;
+	int mi = min(width, height);
+	int ma = max(width, height);
+
+	switch(location){
+		case 0:
+			return Point(width/2, height/2);				//center
+			break;
+		case 1:
+			return Point(width-(mi/5), mi/5);				//top right
+			break;
+		case 2:
+			return Point(mi/5, mi/5);						//top left
+			break;
+		case 3:
+			return Point(mi/5, height-(mi/5));				//bottom left
+			break;
+		case 4:
+			return Point(width-(mi/5), height-(mi/5));		//bottom right
+	}
+
+}
+
+//used in drawAtom()
+void Image::stampEllipse(double angle, int center){
+
+	int thickness = 2;
+	int lineType = 8;
+	int width = matrix.cols;
+	int height = matrix.rows;
+	int avg = (width+height)/2;
+	int mi = min(width, height);
+	int ma = max(width, height);	
+
+	ellipse(matrix,						//Mat that will be stamped
+			destinationPoint(center),	//center point for stamp
+			Size(avg/8, avg/32),		//dimensions of stamp
+			angle,						//rotation of stamp, passed as argument
+			0, 360,						//indicates full ellipse to be stamped
+			Scalar(255, 0, 0),			//will be stamped in blue
+			thickness,					//thickness of line
+			lineType);					//line type
+
+}
+
+void Image::stampFilledCircle(int center){
+
+	int thickness = -1;
+	int lineType = 8;
+	int width = matrix.cols;
+	int height = matrix.rows;
+	int size = width/64;
+
+	circle( matrix,						//Mat that will be stamped
+			destinationPoint(center),	//center point for stamp
+			size,						//dimensions of stamp
+			Scalar(0, 0, 255),			//color of stamp
+			thickness,					//thickness of line
+			lineType);					//line type
+
+}
+
+void Image::stampAtom(int location){
+
+	//The four electron paths
+	stampEllipse(90, location);
+	stampEllipse(0, location);
+	stampEllipse(45, location);
+	stampEllipse(-45, location);
+
+	//Center nucleus
+	stampFilledCircle(location);
+
+}
