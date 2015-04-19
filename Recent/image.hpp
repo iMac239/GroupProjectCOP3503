@@ -21,6 +21,7 @@ class Image {
     
 private:
     cv::Mat originalMatrix;
+    cv::Mat commitMatrix;
     cv::Mat matrix;
 public:
     // Initializers
@@ -29,7 +30,9 @@ public:
     // Getters/Setters
     cv::Mat getMatrix();
     cv::Mat getOriginalMatrix();
+    cv::Mat getCommitMatrix();
     void setMatrix(cv::Mat matrix);
+    void setCommitMatrix(cv::Mat matrix);
     
     // Image Manipulations
     void createMeme(std::string topText, std::string bottomText, double fontSize);
@@ -57,7 +60,6 @@ public:
     
     // Image Output
     void resetImage();
-    void verifyChange(cv::Mat newMatrix);
     void previewImage(cv::Mat mat);
     void writeToPath(std::string path);
 };

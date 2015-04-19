@@ -278,7 +278,7 @@ void applyFilterToImage(Image *image) {
 void applyColorFocusToImage(Image *image) {
     
     
-    int n = 2;
+    int n = 6;
     cv::Scalar color;
     
     switch (n) {
@@ -417,7 +417,41 @@ void previewOriginal(Image *image) {
 
 void revertToOriginal(Image *image) {
     std::cout << "OUTPUT>> Reverting to original image." << std::endl;
-    image->setMatrix(image->getOriginalMatrix());
+    image->resetImage();
+}
+
+void commitChange(Image *image) {
+    char c;
+    
+    std::cout << "OUTPUT>> Displaying image preview. Press any key to continue." << std::endl;
+    image->previewImage(image->getCommitMatrix());
+    
+    while(true) {
+        
+        std::cout << "OUTPUT>> Are you sure you want to apply changes? (Y/N)" << std::endl;
+        
+        std::cout << "INPUT>> ";
+        std::cin >> c;
+        std::cin.ignore();
+        
+        // Validate input
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "ERROR>> Invalid input." << std::endl;
+        } else {
+            if (c == 'y' || c == 'Y') {
+                image->setMatrix(image->getCommitMatrix());
+                std::cout << "OUTPUT>> Changes applied." << std::endl;
+                return;
+            } else if (c == 'n' || c == 'N') {
+                std::cout << "OUTPUT>> Changes discarded." << std::endl;
+                return;
+            } else {
+                std::cout << "ERROR>> Invalid input." << std::endl;
+            }
+        }
+    }
 }
 
 

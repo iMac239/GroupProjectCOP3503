@@ -77,22 +77,29 @@ int main(int argc, const char * argv[]) {
 //        9) Exit
 
         
+        bool commit = false;
         // Handle user command
         switch (n) {
             case 0:
                 applyBorderToImage(image);
+                commit = true;
                 break;
             case 1:
                 applyFilterToImage(image);
+                commit = true;
+
                 break;
             case 2:
                 applyColorFocusToImage(image);
+                commit = true;
                 break;
             case 3:
                 createMemeFromImage(image);
+                commit = true;
                 break;
             case 4:
                 addStampToImage(image);
+                commit = true;
                 break;
             case 5:
                 previewImage(image);
@@ -114,7 +121,14 @@ int main(int argc, const char * argv[]) {
                 cout << "ERROR>> Invalid input." << endl;
                 break;
         }
+        
+        if (commit) {
+            commitChange(image);
+        }
+        
+        
     }
     
     return 0;
 }
+

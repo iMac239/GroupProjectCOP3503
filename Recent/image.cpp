@@ -29,6 +29,7 @@ Image::Image(string path) {
     } else{
         //Store image data
         this->matrix = tmpMatrix;
+        this->commitMatrix = tmpMatrix;
         this->originalMatrix = tmpMatrix;
     }
 }
@@ -39,6 +40,12 @@ Mat Image::getMatrix() {
 }
 void Image::setMatrix(Mat matrix) {
     this->matrix = matrix;
+}
+Mat Image::getCommitMatrix() {
+    return this->commitMatrix;
+}
+void Image::setCommitMatrix(Mat matrix) {
+    this->commitMatrix = matrix;
 }
 Mat Image::getOriginalMatrix() {
     return this->originalMatrix;
@@ -77,7 +84,7 @@ void Image::applyBorder(int top, int bottom, int left, int right, int type) {
     }
     
     copyMakeBorder(this->matrix, borderedMatrix, top, bottom, left, right, borderType, value);
-    verifyChange(borderedMatrix);
+    setCommitMatrix(borderedMatrix);
 }
 void Image::createMeme(string topText, string bottomText, double fontSize) {
     cv::Mat tempMatrix = this->getMatrix();
@@ -146,7 +153,7 @@ void Image::createMeme(string topText, string bottomText, double fontSize) {
     cairo_destroy(cairo);
     cairo_surface_destroy(surface);
 
-    verifyChange(tempMatrix);
+    setCommitMatrix(tempMatrix);
 }
 void Image::presetTintColor(Color color) {
     int hue;
@@ -198,7 +205,7 @@ void Image::customTintColor(int hue) {
     // Convert HSV to BGR
     cvtColor(hsvMatrix, hsvMatrix, CV_HSV2BGR_FULL);
 
-    verifyChange(hsvMatrix);
+    setCommitMatrix(hsvMatrix);
 }
 
 // Color Focus
@@ -237,8 +244,7 @@ void Image::focusColor(cv::Scalar color){
         }
     }
     
-    
-    verifyChange(tempMatrix);
+    setCommitMatrix(tempMatrix);
 }
 
 // Stamp Functions
@@ -313,18 +319,16 @@ void Image::stampAtom(int location){
     //Center nucleus
     tempMatrix = stampFilledCircle(tempMatrix, location);
     
-    verifyChange(tempMatrix);
+    setCommitMatrix(tempMatrix);
     
 }
-
-
 
 // Filters
 void Image::grayscale(){
     Mat tempMatrix = this->getMatrix();
     //filter applied
     cvtColor(tempMatrix, tempMatrix, CV_BGR2GRAY);
-    verifyChange(tempMatrix);
+    setCommitMatrix(tempMatrix);
 }
 void Image::sepia(){
     Mat tempMatrix = this->getMatrix();
@@ -336,7 +340,7 @@ void Image::sepia(){
     
     //filter applied
     transform(tempMatrix, tempMatrix, sepia);
-    verifyChange(tempMatrix);
+    setCommitMatrix(tempMatrix);
 }
 void Image::blur(int a){
     
@@ -352,7 +356,7 @@ void Image::blur(int a){
     
     //filter applied
     filter2D(tempMatrix, tempMatrix, ddepth, kernel, anchor, delta, BORDER_DEFAULT);
-    verifyChange(tempMatrix);
+    setCommitMatrix(tempMatrix);
 }
 void Image::sketch(){
     Mat tempMatrix = this->getMatrix();
@@ -385,14 +389,14 @@ void Image::sketch(){
     //invert image made by previous steps resulting in fina result
     bitwise_not(tempMatrix, tempMatrix);
     
-    verifyChange(tempMatrix);
+    setCommitMatrix(tempMatrix);
 }
 void Image::negative(){
     Mat tempMatrix = this->getMatrix();
     //filter applied
     bitwise_not(tempMatrix, tempMatrix);
     
-    verifyChange(tempMatrix);
+    setCommitMatrix(tempMatrix);
 }
 void Image::erosion(int b){
     Mat tempMatrix = this->getMatrix();
@@ -405,41 +409,10 @@ void Image::erosion(int b){
     
     //filter applied
     erode(tempMatrix, tempMatrix, element);
-    verifyChange(tempMatrix);
+    setCommitMatrix(tempMatrix);
 }
 
 // Saving, Previewing, and Reseting
-void Image::verifyChange(cv::Mat newMatrix) {
-    char c;
-
-    std::cout << "OUTPUT>> Displaying image preview. Press any key to continue." << std::endl;
-    previewImage(newMatrix);
-    
-    while(true) {
-        
-        std::cout << "OUTPUT>> Are you sure you want to apply changes? (Y/N)" << std::endl;
-        
-        std::cout << "INPUT>> ";
-        std::cin >> c;
-        std::cin.ignore();
-        
-        // Validate input
-        if (std::cin.fail()) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "ERROR>> Invalid input." << std::endl;
-        } else {
-            if (c == 'y' || c == 'Y') {
-                setMatrix(newMatrix);
-                break;
-            } else if (c == 'n' || c == 'N') {
-                return;
-            } else {
-                std::cout << "ERROR>> Invalid input." << std::endl;
-            }
-        }
-    }
-}
 void Image::writeToPath(string path) {
     imwrite(path, matrix);
 }
