@@ -1,5 +1,5 @@
-void resize(int w1,int h1){
-	Mat temp(h1,w1,CV_8UC3,Scalar(0,0,0));
+void resize(int nWidth,int nHeight){
+	Mat temp(nHeight,nWidth,CV_8UC3,Scalar(0,0,0));
 	
 	double xr=matrix.rows/(double)w1;
 	double yr=matrix.cols/(double)h1;
