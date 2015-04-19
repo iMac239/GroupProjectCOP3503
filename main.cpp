@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <string>
+#include<cmath>
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
@@ -326,7 +327,32 @@ void previewImage(Image *image) {
     
     image->previewImage();
 }
+/*
+bool checkColor(int *checkColorValues,int bValue, int gValue, int rValue){
+	int rDifference= abs(checkColorValues[2]-rValue); //Find absolute difference in rValues
+	int gDifference=abs(checkColorValues[1]-gValue); //Find absolute difference in gValues
+	int bDifference=abs(checkColorValues[0]-bValue); //Find absolute difference in bValues;
+	if((rDifference<=maxLength)&&(gDifference<=maxLength)&& (bDifference<=maxLength)){    // Checks to see if the r is in the box [30,30,30]
+		return true;
+	}
+	return false;
+};
+void focusColor (int colorOption){
+	for(int y=0; y<testMatrix.rows;y++){
+             for(int x=0; x<testMatrix.cols;x++){
+                 Vec3b color=testMatrix.at<Vec3b>(Point(x,y));
+                 if(!checkColor(colorArray[colorOption],color[0],color[1],color[2])){
+					int grayValue=grayScale(color[0],color[1],color[2]);
+					color[0]=grayValue;
+					color[1]=grayValue;
+					color[2]=grayValue;
+					testMatrix.at<Vec3b>(Point(x,y))=color;
+				 }
+             }
+	}
+};
 
+*/
 
 
 
