@@ -219,17 +219,17 @@ void Image::resize(int w,int h) {
 }
 
 void Image::collage(int w, int h){
-    Mat temp = workingMatrix.clone();
-    int thumbNailW = workingMatrix.cols/w;
-    int thumbNailH = workingMatrix.rows/h;
-    resize(thumbNailW,thumbNailH);
-    Mat thumbNail = workingMatrix.clone();
-    workingMatrix = temp;
+    Mat temp = workingMatrix.clone();   //create temp matrix
+    int thumbNailW = workingMatrix.cols/w; //determine width of thumbnail
+    int thumbNailH = workingMatrix.rows/h;//determine height of thumbnail
+    resize(thumbNailW,thumbNailH); //resize workingMatrix
+    Mat thumbNail = workingMatrix.clone(); //set thumbnail to workingMatrix values
+    workingMatrix = temp; //sets workingMatrix back to original
     
     for(int y = 0; y < temp.rows; y++){
-        for(int x = 0; x < temp.cols; x++){
-            Vec3b color = thumbNail.at<Vec3b>(Point(x,y));
-            temp.at<Vec3b>(Point(x,y)) = thumbNail.at<Vec3b>(Point(x % thumbNail.cols, y % thumbNail.rows));
+        for(int x = 0; x < temp.cols; x++){   //iterate through temp
+            Vec3b color = thumbNail.at<Vec3b>(Point(x,y)); //find color at thumbnail
+            temp.at<Vec3b>(Point(x,y)) = thumbNail.at<Vec3b>(Point(x % thumbNail.cols, y % thumbNail.rows)); //
         }
     }
 }
@@ -237,33 +237,33 @@ void Image::collage(int w, int h){
 // Color Focus
 bool Image::checkColor(cv::Scalar color, int bValue, int gValue, int rValue){
     
-    int rDifference = color[2] - rValue;
-    int gDifference = color[1] - gValue;
-    int bDifference = color[0] - bValue;
+    int rDifference = color[2] - rValue; //Red Value Differential
+    int gDifference = color[1] - gValue; //Green Value Differential 
+    int bDifference = color[0] - bValue; //Blue Value Differential
     
-    int distance = sqrt(pow(rDifference, 2) + pow(gDifference, 2) + pow(bDifference, 2));
+    int distance = sqrt(pow(rDifference, 2) + pow(gDifference, 2) + pow(bDifference, 2));//Distance between pixel and selected Focus color
     
-    int tolerance = 75;
-    int maxDistance = sqrt(pow(tolerance, 2) + pow(tolerance, 2) + pow(tolerance, 2));
+    int tolerance = 75; // Set the maximum distance between pixel and selected focus color
+    int maxDistance = sqrt(pow(tolerance, 2) + pow(tolerance, 2) + pow(tolerance, 2)); //Finds the three dimensional distance using tolerance
     
-    if(distance <= maxDistance){
-        // Checks to see if the distance is within the radius of max length
+    if(distance <= maxDistance){ //Check go see if distance is less than max distance
+
         return true;
     }
     return false;
 }
 void Image::focusColor(cv::Scalar color){
 
-    for(int y=0; y<workingMatrix.rows;y++){
-        for(int x=0; x<workingMatrix.cols;x++){
+    for(int y=0; y<workingMatrix.rows;y++){ 
+        for(int x=0; x<workingMatrix.cols;x++){                 //iterates through matrix
             
-            Vec3b currentPixelColor = workingMatrix.at<Vec3b>(Point(x,y));
+            Vec3b currentPixelColor = workingMatrix.at<Vec3b>(Point(x,y));      //current pixel scalar at coordinate(x,y)
                                                                                                                                         
-            if (!checkColor(color, currentPixelColor[0], currentPixelColor[1], currentPixelColor[2])) {
+            if (!checkColor(color, currentPixelColor[0], currentPixelColor[1], currentPixelColor[2])) { //Check to see if color 
                 
                 
-                int grayValue = (currentPixelColor[0] + currentPixelColor[1] + currentPixelColor[2]) / 3.0;
-                workingMatrix.at<Vec3b>(Point(x,y)) = Vec3b(grayValue, grayValue, grayValue);
+                int grayValue = (currentPixelColor[0] + currentPixelColor[1] + currentPixelColor[2]) / 3.0; //Gray Scale Pixel
+                workingMatrix.at<Vec3b>(Point(x,y)) = Vec3b(grayValue, grayValue, grayValue);//Sets pixel to gray scale
                 
             }
         }
