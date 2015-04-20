@@ -15,6 +15,7 @@ using namespace std;
 using namespace cv;
 
 int main(int argc, const char * argv[]) {
+    bool commit = false;
     Image *image;
     
     // Loop until user enters a valid image
@@ -65,19 +66,6 @@ int main(int argc, const char * argv[]) {
             continue;
         }
         
-//        0) Apply Border
-//        1) Apply Filter
-//        2) Color Focus
-//        3) Generate Meme
-//        4) Add Stamp
-//        5) Preview Current
-//        6) Preview Original
-//        7) Revert to Original
-//        8) Save Image
-//        9) Exit
-
-        
-        bool commit = false;
         // Handle user command
         switch (n) {
             case 0:
@@ -102,7 +90,7 @@ int main(int argc, const char * argv[]) {
                 commit = true;
                 break;
             case 5:
-                previewImage(image);
+                previewCurrent(image);
                 break;
             case 6:
                 previewOriginal(image);
@@ -124,6 +112,7 @@ int main(int argc, const char * argv[]) {
         
         if (commit) {
             commitChange(image);
+            commit = false;
         }
         
         

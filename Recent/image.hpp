@@ -22,17 +22,15 @@ class Image {
 private:
     cv::Mat originalMatrix;
     cv::Mat commitMatrix;
-    cv::Mat matrix;
+    cv::Mat workingMatrix;
 public:
     // Initializers
     Image(std::string path);
     
     // Getters/Setters
-    cv::Mat getMatrix();
     cv::Mat getOriginalMatrix();
     cv::Mat getCommitMatrix();
-    void setMatrix(cv::Mat matrix);
-    void setCommitMatrix(cv::Mat matrix);
+    void setCommitMatrix(cv::Mat tmp);
     
     // Image Manipulations
     void createMeme(std::string topText, std::string bottomText, double fontSize);
@@ -44,8 +42,8 @@ public:
     
     // Stamp Functions
     cv::Point destinationPoint(int location);
-    cv::Mat stampEllipse(cv::Mat mat, double angle, int center);
-    cv::Mat stampFilledCircle(cv::Mat mat, int center);
+    void stampEllipse(double angle, int center);
+    void stampFilledCircle(int center);
     void stampAtom(int location);
 
     // Filters
@@ -59,8 +57,11 @@ public:
     void erosion(int b);
     
     // Image Output
+    void previewOriginalImage();
+    void previewCurrentImage();
+    void previewCommitImage();
+    void applyChanges(bool b);
     void resetImage();
-    void previewImage(cv::Mat mat);
     void writeToPath(std::string path);
 };
 

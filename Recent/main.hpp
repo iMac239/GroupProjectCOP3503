@@ -277,44 +277,75 @@ void applyFilterToImage(Image *image) {
 
 void applyColorFocusToImage(Image *image) {
     
-    
-    int n = 6;
+    int n = 0;
     cv::Scalar color;
-    
-    switch (n) {
-        case 0:
-            // Red
-            color = cv::Scalar(32,0,255);
-            break;
-        case 1:
-            // Blue
-            color = cv::Scalar(200,120,0);
-            break;
-        case 2:
-            // Green
-            color = cv::Scalar(0,200,60);
-            break;
-        case 3:
-            // Cyan
-            color = cv::Scalar(255,255,0);
-            break;
-        case 4:
-            // Yellow
-            color = cv::Scalar(50,255,255);
-            break;
-        case 5:
-            // Magenta
-            color = cv::Scalar(255,50,255);
-            break;
-        case 6:
-            // Orange
-            color = cv::Scalar(0,130,255);
-            
-            break;
-            
-        default:
-            break;
+
+    while(true) {
+        
+        //Main filter menu
+        std::cout << "OUTPUT>> Select a color: " << std::endl;
+        std::cout << "\t0) Red" << std::endl;
+        std::cout << "\t1) Blue" << std::endl;
+        std::cout << "\t2) Green" << std::endl;
+        std::cout << "\t3) Cyan" << std::endl;
+        std::cout << "\t4) Yellow" << std::endl;
+        std::cout << "\t5) Magenta" << std::endl;
+        std::cout << "\t6) Orange" << std::endl;
+        
+        //Get user input
+        std::cout << "INPUT>> ";
+        std::cin >> n;
+        
+        // Validate input
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "ERROR>> Invalid input." << std::endl;
+            continue;
+        } else {
+            if (n < 0 || n > 6) {
+                std::cout << "ERROR>> Invalid color." << std::endl;
+                continue;
+            }
+        }
+        
+        switch (n) {
+            case 0:
+                // Red
+                color = cv::Scalar(32,0,255);
+                break;
+            case 1:
+                // Blue
+                color = cv::Scalar(200,120,0);
+                break;
+            case 2:
+                // Green
+                color = cv::Scalar(0,200,60);
+                break;
+            case 3:
+                // Cyan
+                color = cv::Scalar(255,255,0);
+                break;
+            case 4:
+                // Yellow
+                color = cv::Scalar(50,255,255);
+                break;
+            case 5:
+                // Magenta
+                color = cv::Scalar(255,50,255);
+                break;
+            case 6:
+                // Orange
+                color = cv::Scalar(0,130,255);
+                break;
+                
+            default:
+                continue;
+        }
+        break;
     }
+    
+
     
     image->focusColor(color);
     
@@ -402,17 +433,17 @@ void writeImage(Image *image) {
     image->writeToPath(writePath);
 }
 
-void previewImage(Image *image) {
+void previewCurrent(Image *image) {
     // Break loop to kill program
     std::cout << "OUTPUT>> Displaying image preview. Press any key to continue." << std::endl;
     
-    image->previewImage(image->getMatrix());
+    image->previewCurrentImage();
 }
 
 void previewOriginal(Image *image) {
     // Break loop to kill program
     std::cout << "OUTPUT>> Displaying image preview. Press any key to continue." << std::endl;
-    image->previewImage(image->getOriginalMatrix());
+    image->previewOriginalImage();
 }
 
 void revertToOriginal(Image *image) {
@@ -424,7 +455,7 @@ void commitChange(Image *image) {
     char c;
     
     std::cout << "OUTPUT>> Displaying image preview. Press any key to continue." << std::endl;
-    image->previewImage(image->getCommitMatrix());
+    image->previewCurrentImage();
     
     while(true) {
         
@@ -441,10 +472,11 @@ void commitChange(Image *image) {
             std::cout << "ERROR>> Invalid input." << std::endl;
         } else {
             if (c == 'y' || c == 'Y') {
-                image->setMatrix(image->getCommitMatrix());
+                image->applyChanges(true);
                 std::cout << "OUTPUT>> Changes applied." << std::endl;
                 return;
             } else if (c == 'n' || c == 'N') {
+                image->applyChanges(false);
                 std::cout << "OUTPUT>> Changes discarded." << std::endl;
                 return;
             } else {
